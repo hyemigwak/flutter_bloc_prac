@@ -1,5 +1,5 @@
 import 'package:bloc_prac/todos/todo_bloc.dart';
-import 'package:bloc_prac/todos/todo_model.dart';
+import 'package:bloc_prac/todos/todo_event.dart';
 import 'package:bloc_prac/todos/todo_state.dart';
 import 'package:bloc_prac/todos/widgets/todo_card.dart';
 import 'package:flutter/material.dart';
@@ -14,12 +14,6 @@ class TodoListView extends StatefulWidget {
 
 class _TodoListView extends State<TodoListView> {
 
-  // List<Todo> todoList = [
-  //   Todo(id: 0, content: 'bloc todoList 만들기', isDone: true),
-  //   Todo(id: 1, content: 'ios 프로비저닝 설정 다시하기', isDone: false),
-  //   Todo(id: 2, content: '피그마 로직 체크하기', isDone: false),
-  // ];
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<TodoBloc, TodoState>(
@@ -30,8 +24,16 @@ class _TodoListView extends State<TodoListView> {
                 children: [
                   const SizedBox(height: 10.0),
                   Expanded(
-                    child: ListView.builder(
-                      itemCount: state.,
+                    child: state.status == TodoStatus.initial
+                      ? const Center(
+                        child: Text('할 일이 정말 없나여? 작성해주세요...',
+                        style: TextStyle(
+                          fontSize: 22,
+                          color: Colors.white
+                        )
+                        )
+                    ) : ListView.builder(
+                      itemCount: state.todoList.length,
                       itemBuilder: (BuildContext context, int idx) {
                         return TodoCard(
                           todo: state.todoList[idx],
@@ -73,27 +75,35 @@ void _addTodoDialog(BuildContext context) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
-      return AlertDialog(
-          title: const Text('다 놀았으면 할 일을 하자'),
-          content: TextField(
-            onChanged: (value) {},
-            controller: textFieldController,
-            decoration: const InputDecoration(hintText: "할게많구나..."),
-          ),
-          actions: [
-            ElevatedButton(
-              child: const Text('등로옥🎀'),
-              onPressed: () => Navigator.pop(context, textFieldController.text),
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xffECE8E7),
-                foregroundColor: Colors.black.withOpacity(0.4),
+      return Builder(
+        builder: (context) {
+          return AlertDialog(
+              title: const Text('다 놀았으면 할 일을 하자'),
+              content: TextField(
+                onChanged: (value) {},
+                controller: textFieldController,
+                decoration: const InputDecoration(hintText: "할게많구나..."),
               ),
-              child: const Text('닫기'),
-              onPressed: () => Navigator.pop(context),
-            ),
-          ]
+              actions: [
+                ElevatedButton(
+                  child: const Text('등로옥🎀'),
+                  onPressed: () {
+                    context.read<TodoBloc>().add(
+                        AddTodo(content: textFieldController.text));
+                    Navigator.pop(context);
+                  }
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xffECE8E7),
+                    foregroundColor: Colors.black.withOpacity(0.4),
+                  ),
+                  child: const Text('닫기'),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ]
+          );
+        }
       );
     },
   );

@@ -2,16 +2,19 @@
 abstract class TodoEvents {
   const TodoEvents();
 }
-class GetTodos extends TodoEvents {
-  const GetTodos();
-}
+
 class AddTodo extends TodoEvents {
-  const AddTodo();
+  final String content;
+  const AddTodo({required this.content});
 }
 class UpdateTodo extends TodoEvents {
-  const UpdateTodo();
+  final int id;
+  const UpdateTodo({required this.id});
 }
 class DeleteTodo extends TodoEvents {
-  const DeleteTodo();
+  final int id;
+  const DeleteTodo({required this.id});
 }
+
+
 

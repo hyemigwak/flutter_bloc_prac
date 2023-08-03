@@ -14,29 +14,25 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'bloc prac',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Amy Dev TodoList 🐣',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
-          )
+    return BlocProvider<TodoBloc>(
+      create: (BuildContext context) => TodoBloc(),
+      child: MaterialApp(
+        title: 'bloc prac',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
         ),
-        body: BlocProvider(
-          create: (BuildContext context) => TodoBloc(),
-          child: const TodoListView(),
+        home: Scaffold(
+          appBar: AppBar(
+            title: const Text('Amy Dev TodoList 🐣',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            )
+          ),
+          body: const TodoListView(),
         ),
       ),
-      // BlocProvider(
-      //   create: (_) => CounterBloc(),
-      //   child: const TodoListView(),
-      // ),
     );
   }
 }
