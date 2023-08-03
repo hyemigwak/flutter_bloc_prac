@@ -3,8 +3,8 @@ import 'package:bloc_prac/todos/todo_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'count_view.dart';
-import 'counter_event.dart';
+import 'count/count_view.dart';
+import 'count/counter_event.dart';
 
 void main() {
   runApp(const MyApp());
