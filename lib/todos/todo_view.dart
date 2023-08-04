@@ -18,51 +18,98 @@ class _TodoListView extends State<TodoListView> {
   Widget build(BuildContext context) {
     return BlocBuilder<TodoBloc, TodoState>(
         builder: (context, state) {
-          return Container(
-            color: Colors.deepPurple,
-            child: Column(
-                children: [
-                  const SizedBox(height: 10.0),
-                  Expanded(
-                    child: state.status == TodoStatus.initial
-                      ? const Center(
-                        child: Text('할 일이 정말 없나여? 작성해주세요...',
-                        style: TextStyle(
+          return CustomScrollView(
+            physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+            slivers: [
+              if (state.status == TodoStatus.initial) ...[
+                const SliverFillRemaining(
+                  child: Center(
+                    child: Text(
+                      '할 일이 정말 없나여? 작성해주세요...',
+                      style: TextStyle(
                           fontSize: 22,
                           color: Colors.white
-                        )
-                        )
-                    ) : ListView.builder(
-                      itemCount: state.todoList.length,
-                      itemBuilder: (BuildContext context, int idx) {
-                        return TodoCard(
-                          todo: state.todoList[idx],
-                        );
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                        padding: MaterialStateProperty.all<EdgeInsets>(
-                            const EdgeInsets.symmetric(
-                                horizontal: 40, vertical: 15)),
-                      ),
-                      onPressed: () {
-                        _addTodoDialog(context);
-                      },
-                      child: const Text('할 일 추가하기 💛',
-                          style: TextStyle(
-                            fontSize: 20,
-                          )
                       ),
                     ),
                   ),
-                  const SizedBox(height: 10)
-                ]
-            ),
+                ),
 
+              ] else ...[
+                SliverPadding(
+                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                  sliver: SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          return TodoCard(
+                            todo: state.todoList[index],
+                          );
+                        },
+                      childCount: state.todoList.length,
+                    ),
+                  ),
+                ),
+              ],
+            ],
+          );
+          // ElevatedButton(
+          //   style: ButtonStyle(
+          //     padding: MaterialStateProperty.all<EdgeInsets>(
+          //         const EdgeInsets.symmetric(
+          //             horizontal: 40, vertical: 15)),
+          //   ),
+          //   onPressed: () {
+          //     _addTodoDialog(context);
+          //   },
+          //   child: const Text('할 일 추가하기 💛',
+          //       style: TextStyle(
+          //         fontSize: 20,
+          //       )
+          //   ),
+          // )
+
+
+          return Column(
+              children: [
+                // const SizedBox(height: 10.0),
+                Expanded(
+                  child: state.status == TodoStatus.initial
+                    ? const Center(
+                      child: Text('할 일이 정말 없나여? 작성해주세요...',
+                      style: TextStyle(
+                        fontSize: 22,
+                        color: Colors.white
+                      )
+                      )
+                  ) : ListView.builder(
+                    itemCount: state.todoList.length,
+                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                    itemBuilder: (BuildContext context, int idx) {
+                      return TodoCard(
+                        todo: state.todoList[idx],
+                      );
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                      padding: MaterialStateProperty.all<EdgeInsets>(
+                          const EdgeInsets.symmetric(
+                              horizontal: 40, vertical: 15)),
+                    ),
+                    onPressed: () {
+                      _addTodoDialog(context);
+                    },
+                    child: const Text('할 일 추가하기 💛',
+                        style: TextStyle(
+                          fontSize: 20,
+                        )
+                    ),
+                  ),
+                ),
+                // const SizedBox(height: 10)
+              ]
           );
         }
     );

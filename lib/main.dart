@@ -23,6 +23,7 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
         ),
         home: Scaffold(
+          backgroundColor: Colors.deepPurple,
           appBar: AppBar(
             title: const Text('Amy Dev TodoList 🐣',
               style: TextStyle(
